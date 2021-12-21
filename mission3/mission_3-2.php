@@ -27,6 +27,9 @@
         $tex=$num."<>".$name."<>".$com."<>".$date;
 
         fwrite($fp,$tex.PHP_EOL);
+        foreach(file($filename) as $line) {
+            //echo (explode("<>",$line))."<br>";
+        } 
         fclose($fp);
     ?>
 </body>
