@@ -22,7 +22,7 @@
         if(file_exists($filename)){
             $lines = file($filename,FILE_IGNORE_NEW_LINES);
             foreach($lines as $num){
-                if ($num % 3 == 0 && $num % 5 == 0) {
+                if ((int)$num % 3 == 0 && (int)$num % 5 == 0) {
                     echo "FizzBuzz<br>";
                 } elseif ($num % 3 == 0) {
                     echo "Fizz<br>";

@@ -13,10 +13,9 @@
         <input type="submit" name="submit">
     </form>
     <?php
-        $filename = "mission_3-1.txt";
-        $fp = fopen($filename,"a");
-
-        $num = 0;
+        $filename = "mission_3-1.txt";//ファイルの名前を決める
+        $fp = fopen($filename,"a");//追記モードで開く。
+        $num = 0;//必要かわからん
         $name = $_POST["name"];
         $com = $_POST["com"];
         $date = date("Y年m月d日 H時i分s秒");
@@ -26,10 +25,14 @@
         $tex=$num."<>".$name."<>".$com."<>".$date;
 
         fwrite($fp,$tex.PHP_EOL);
-        fclose($fp);
-        foreach(file($filename) as $line) {
-            echo explode("<>",$line)."<br>";
+        foreach(file($filename) as $lines) {
+            $line = explode("<>",$lines);
+            echo $line[0];
+            echo $line[1];
+            echo $line[2];
+            echo $line[3]."<br>";
         } 
+        fclose($fp);
     ?>
 </body>
 </html>
