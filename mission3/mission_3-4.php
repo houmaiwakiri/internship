@@ -51,7 +51,6 @@
             fwrite($fp,$tex.PHP_EOL);
             fclose($fp);
         }
-        
         //削除
         $del = $_POST["del"];//削除ナンバー受け取り
         if(!empty($_POST["del"])){
@@ -67,6 +66,23 @@
         }
         //編集
         $edit = $_POST["edit"];
+        $editFilename = "edit_3-4.txt";//編集用ファイルの名前を決める
+        $fp = fopen($editFilename,"w");//新規モードで開く。
+        fwrite($fp,$edit.PHP_EOL);
+        fclose($fp);
+
+        if(!empty($_POST["edit"])){
+            $editNum=file($filename);
+            for($i=0; $i<count($editNum); $i++){
+                $editData = explode("<>",$editNum[0]);
+            }
+            if($editData[0]==$edit){
+                echo "ggg";
+            }else{
+                echo "nnnnn";
+            }
+        }
+        /*
         if(isset($_POST["edit"])){
             foreach(file($filename)as $editForm){
                 $editnum = explode("<>",$editForm);
@@ -78,6 +94,7 @@
                 echo "omg";
             }
         }
+        */
         //表示
         if(file_exists($filename)){
             foreach(file($filename) as $lines) {
