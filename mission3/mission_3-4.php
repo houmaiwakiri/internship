@@ -20,8 +20,14 @@
             <input type="submit" name="submit" value="削除">
         </form>
     </div>
+    <div class="edit">
+        <form action="" method="post" value="">
+            <input type="number" name="edit" value="編集対象番号"> 
+            <input type="submit" name="submit" value="編集">
+        </form>            
+    </div>
     <?php
-        $filename = "mission_3-3.txt";//ファイルの名前を決める
+        $filename = "mission_3-4.txt";//ファイルの名前を決める
         $fp = fopen($filename,"a");//追記モードで開く。
         $name = $_POST["name"];
         $com = $_POST["com"];
@@ -45,9 +51,9 @@
             fwrite($fp,$tex.PHP_EOL);
             fclose($fp);
         }
-        $del = $_POST["del"];//削除ナンバー受け取り
         
         //削除
+        $del = $_POST["del"];//削除ナンバー受け取り
         if(!empty($_POST["del"])){
             $delnum=file($filename);
             for($i=0; $i<count($delnum); $i++){
@@ -59,6 +65,19 @@
                 }
             }
         }
+        //編集
+        $edit = $_POST["edit"];
+        if(isset($_POST["edit"])){
+            foreach(file($filename)as $editForm){
+                $editnum = explode("<>",$editForm);
+            }
+            //もし編集ナンバーと投稿ナンバーが同じ場合、処理を行う。
+            if($editnum[0] == $edit){
+                echo "成功";
+            }else{
+                echo "omg";
+            }
+        }
         //表示
         if(file_exists($filename)){
             foreach(file($filename) as $lines) {
@@ -68,7 +87,7 @@
                 echo $line[2];
                 echo $line[3]."<br>";
             } 
-        }        
+        } 
     ?>
 </body>
 </html>
