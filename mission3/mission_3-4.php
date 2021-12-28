@@ -47,9 +47,29 @@
         if($name=="" && $com==""){
         }elseif($name==""){
         }elseif($com==""){
-        }else{
-            fwrite($fp,$tex.PHP_EOL);
-            fclose($fp);
+        }elseif(!empty($name) && !empty($com)){
+            //新規投稿
+            if($edit == ""){
+                fwrite($fp,$tex.PHP_EOL);
+                fclose($fp);
+            }elseif($edit == !""){
+            //編集
+                $edit = $_POST["edit"];
+                $editFilename = "edit_3-4.txt";//編集用ファイルの名前を決める
+                $fp = fopen($editFilename,"w");//新規モードで開く。
+                fwrite($fp,$edit.PHP_EOL);
+                fclose($fp);
+                $editNum=file($filename);
+                for($i=0; $i<count($editNum); $i++){
+                    $editData = explode("<>",$editNum[0]);
+                }
+                if($editData[0]==$edit){
+                        fwrite();
+                }else{
+                    echo "その投稿はありません。";
+                }
+                
+            }
         }
         //削除
         $del = $_POST["del"];//削除ナンバー受け取り
@@ -64,8 +84,9 @@
                 }
             }
         }
+
         //編集
-        $edit = $_POST["edit"];
+        /*$edit = $_POST["edit"];
         $editFilename = "edit_3-4.txt";//編集用ファイルの名前を決める
         $fp = fopen($editFilename,"w");//新規モードで開く。
         fwrite($fp,$edit.PHP_EOL);
@@ -77,11 +98,13 @@
                 $editData = explode("<>",$editNum[0]);
             }
             if($editData[0]==$edit){
-                echo "ggg";
+                    fwrite();
+                
             }else{
-                echo "nnnnn";
+                echo "その投稿はありません。";
             }
-        }
+        }*/
+        
         /*
         if(isset($_POST["edit"])){
             foreach(file($filename)as $editForm){
