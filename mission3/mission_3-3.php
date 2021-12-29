@@ -45,9 +45,9 @@
             fwrite($fp,$tex.PHP_EOL);
             fclose($fp);
         }
-        $del = $_POST["del"];//削除ナンバー受け取り
         
         //削除
+        $del = $_POST["del"];//削除ナンバー受け取り
         if(!empty($_POST["del"])){
             $delnum=file($filename);
             for($i=0; $i<count($delnum); $i++){
