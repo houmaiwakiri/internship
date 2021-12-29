@@ -20,14 +20,8 @@
             <input type="submit" name="submit" value="削除">
         </form>
     </div>
-    <div class="edit">
-        <form action="" method="post" value="">
-            <input type="number" name="edit" value="編集対象番号"> 
-            <input type="submit" name="submit" value="編集">
-        </form>            
-    </div>
     <?php
-        $filename = "mission_3-4.txt";//ファイルの名前を決める
+        $filename = "mission_3-3.txt";//ファイルの名前を決める
         $fp = fopen($filename,"a");//追記モードで開く。
         $name = $_POST["name"];
         $com = $_POST["com"];
@@ -47,30 +41,11 @@
         if($name=="" && $com==""){
         }elseif($name==""){
         }elseif($com==""){
-        }elseif(!empty($name) && !empty($com)){
-            //新規投稿
-            if($edit == ""){
-                fwrite($fp,$tex.PHP_EOL);
-                fclose($fp);
-            }elseif($edit == !""){
-            //編集
-                $edit = $_POST["edit"];
-                $editFilename = "edit_3-4.txt";//編集用ファイルの名前を決める
-                $fp = fopen($editFilename,"w");//新規モードで開く。
-                fwrite($fp,$edit.PHP_EOL);
-                fclose($fp);
-                $editNum=file($filename);
-                for($i=0; $i<count($editNum); $i++){
-                    $editData = explode("<>",$editNum[0]);
-                }
-                if($editData[0]==$edit){
-                        fwrite();
-                }else{
-                    echo "その投稿はありません。";
-                }
-                
-            }
+        }else{
+            fwrite($fp,$tex.PHP_EOL);
+            fclose($fp);
         }
+        
         //削除
         $del = $_POST["del"];//削除ナンバー受け取り
         if(!empty($_POST["del"])){
@@ -84,40 +59,6 @@
                 }
             }
         }
-
-        //編集
-        /*$edit = $_POST["edit"];
-        $editFilename = "edit_3-4.txt";//編集用ファイルの名前を決める
-        $fp = fopen($editFilename,"w");//新規モードで開く。
-        fwrite($fp,$edit.PHP_EOL);
-        fclose($fp);
-
-        if(!empty($_POST["edit"])){
-            $editNum=file($filename);
-            for($i=0; $i<count($editNum); $i++){
-                $editData = explode("<>",$editNum[0]);
-            }
-            if($editData[0]==$edit){
-                    fwrite();
-                
-            }else{
-                echo "その投稿はありません。";
-            }
-        }*/
-        
-        /*
-        if(isset($_POST["edit"])){
-            foreach(file($filename)as $editForm){
-                $editnum = explode("<>",$editForm);
-            }
-            //もし編集ナンバーと投稿ナンバーが同じ場合、処理を行う。
-            if($editnum[0] == $edit){
-                echo "成功";
-            }else{
-                echo "omg";
-            }
-        }
-        */
         //表示
         if(file_exists($filename)){
             foreach(file($filename) as $lines) {
@@ -127,7 +68,7 @@
                 echo $line[2];
                 echo $line[3]."<br>";
             } 
-        } 
+        }        
     ?>
 </body>
 </html>
