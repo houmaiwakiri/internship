@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mission3-3</title>
+    <title>mission3-4</title>
 </head>
 <body>
     <div class="post">
@@ -21,43 +21,40 @@
         </form>
     </div>
     <?php
-        $filename = "mission_3-3.txt";//ファイルの名前を決める
-        $fp = fopen($filename,"a");//追記モードで開く。
-        $name = $_POST["name"];
-        $com = $_POST["com"];
+        $filename = "mission_3-4.txt";//ファイルの名前を決める
         $date = date("Y年m月d日 H時i分s秒");
-        //これを使うと、投稿を削除した時に番号が重なってしまう。とりあえず先に進む。
-        $num = count( file( $filename ) ); // ファイルのデータの行数を数えて$numに代入
-        $num++; // 投稿番号を取得
+        if(!empty($_POST["name"]) && !empty($_POST["com"])){
+            $fp = fopen($filename,"a");//追記モードで開く。
+            $name = $_POST["name"];
+            $com = $_POST["com"];
 
-        /*メンバーのコード
-        $lines = file($filename.FILE_IGNORE_NEW_LINES);
-        $lastline = $lines[count($lines)-1];
-        $num = explode("<>",$lastline)[0]+1;
-        */
-
-        $tex=$num."<>".$name."<>".$com."<>".$date;
-
-        if($name=="" && $com==""){
-        }elseif($name==""){
-        }elseif($com==""){
-        }else{
+            if(file_exists($filename)){
+                //投稿番号
+                $lines=file($filename);//($filename,FILE_SKIP_EMPTY_LINES)
+                $lastline= count($lines);
+                $num=$lastline+1;
+            }else{
+               $num = 1;
+            }
+            $tex=$num."<>".$name."<>".$com."<>".$date;
             fwrite($fp,$tex.PHP_EOL);
             fclose($fp);
-        }
-        
-        //削除
-        $del = $_POST["del"];//削除ナンバー受け取り
-        if(!empty($_POST["del"])){
-            $delnum=file($filename);
-            for($i=0; $i<count($delnum); $i++){
-                $delData = explode("<>",$delnum[$i]);
-                //array_splice ( $配列, $開始位置[, $削除する要素の数 [, $置き換える要素を含んだ配列 ]] )
-                if($delData[0]==$del){
-                    array_splice($delnum,$i,1);
-                    file_put_contents($filename, implode("",$delnum));
+        }elseif(!empty($_POST["del"]) && empty($name) && empty($com)){
+            //削除機能
+            $del = $_POST["del"];//削除ナンバー受け取り
+            if(!empty($_POST["del"])){
+                $delnum=file($filename);
+                for($i=0; $i<count($delnum); $i++){
+                    $delData = explode("<>",$delnum[$i]);
+                    //array_splice ( $配列, $開始位置[, $削除する要素の数 [, $置き換える要素を含んだ配列 ]] )
+                    if($delData[0]==$del){
+                        array_splice($delnum,$i,1);
+                        file_put_contents($filename, implode("",$delnum));
+                    }
                 }
             }
+        }else{
+            echo "入力されていません。"."<br>";
         }
         //表示
         if(file_exists($filename)){
@@ -68,7 +65,7 @@
                 echo $line[2];
                 echo $line[3]."<br>";
             } 
-        }        
+        }      
     ?>
 </body>
 </html>
