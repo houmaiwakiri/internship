@@ -7,11 +7,13 @@
     <title>mission3-4</title>
 </head>
 <body>
-    <div class="post">
-        <form action="" method="post" value="コメント">
-            <input type="text" name="name" value="お名前">
-            <input type="text" name="com" value="コメント">
+    <div class="post-edit">
+        <form action="" method="post">
+            <input type="text" name="name">
+            <input type="text" name="com">
             <input type="submit" name="submit">
+            <input type="number" name="edit">
+            <input type="submit" name="submit" value="編集">
         </form>
     </div>
     <div class="delete">
@@ -39,7 +41,7 @@
             $tex=$num."<>".$name."<>".$com."<>".$date;
             fwrite($fp,$tex.PHP_EOL);
             fclose($fp);
-        }elseif(!empty($_POST["del"]) && empty($name) && empty($com)){
+        }elseif(!empty($_POST["del"]) && empty($name) && empty($com)&& empty($_POST["edit"])){
             //削除機能
             $del = $_POST["del"];//削除ナンバー受け取り
             if(!empty($_POST["del"])){
@@ -53,6 +55,35 @@
                     }
                 }
             }
+        }elseif(!empty($_POST["edit"]) && empty($name) && empty($com)&& empty($_POST["del"])){
+            //編集を受け取る。
+            $edit = $_POST["edit"];//編集ナンバー受け取り
+            $lines=file($filename,FILE_SKIP_EMPTY_LINES);
+            $lastline= count($lines);
+            foreach($lines as $line){
+              $word=explode("<>",$line);
+            }
+            foreach($lines as $line){
+                $editData=explode("<>",$line);
+                //echo $word[0];
+                if($editData[0] == $edit){
+                  $edit_name=$editData[1];
+                  $edit_com=$editData[2];
+                  $edit_date=$editData[3];
+                  $edit_num=$editData[0];
+                  echo
+                  '<input type="text" name="edit_name" value="'.$edit_name.'"></input><br>
+                  <input type="text" name="edit_comment" value="'.$edit_com.'"></input>
+                  <input type="hidden" name="edit_number" value="'.$edit_num.'"></input>
+                  <input type="submit" name="button" value="編集する" style="font-size: 12px;"><br>
+                  </form>';
+                }
+            }
+        }elseif(!empty($_POST["edit_name"])&&!empty($_POST["edit_com"])&&!empty($_POST["edit_num"])){    
+            //編集結果を書き込む。
+            $edit_name=$_POST["edit_name"];
+            $edit_com=$_POST["edit_com"];
+            $edit_num=$_POST["edit_num"];            
         }else{
             echo "入力されていません。"."<br>";
         }
@@ -60,9 +91,9 @@
         if(file_exists($filename)){
             foreach(file($filename) as $lines) {
                 $line = explode("<>",$lines);//linesを<>で区切ってlineに代入
-                echo $line[0];
-                echo $line[1];
-                echo $line[2];
+                echo $line[0].":";
+                echo $line[1].":";
+                echo $line[2].":";
                 echo $line[3]."<br>";
             } 
         }      
