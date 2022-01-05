@@ -7,21 +7,17 @@
     <title>mission3-4</title>
 </head>
 <body>
-    <div class="post-edit">
-        <form action="" method="post">
+    <form action="" method="post">
             <input type="text" name="name">
             <input type="text" name="com">
             <input type="submit" name="submit">
             <input type="number" name="edit">
             <input type="submit" name="submit" value="編集">
-        </form>
-    </div>
-    <div class="delete">
-        <form action="" method="post" value="">
+            <br>
             <input type="number" name="del" value="削除対象番号"> 
             <input type="submit" name="submit" value="削除">
-        </form>
-    </div>
+            <br>
+            <!--formの閉じタグは下の方にある。-->
     <?php
         $filename = "mission_3-4.txt";//ファイルの名前を決める
         $date = date("Y年m月d日 H時i分s秒");
@@ -73,9 +69,9 @@
                   $edit_num=$editData[0];
                   echo
                   '<input type="text" name="edit_name" value="'.$edit_name.'"></input><br>
-                  <input type="text" name="edit_comment" value="'.$edit_com.'"></input>
-                  <input type="hidden" name="edit_number" value="'.$edit_num.'"></input>
-                  <input type="submit" name="button" value="編集する" style="font-size: 12px;"><br>
+                  <input type="text" name="edit_com" value="'.$edit_com.'"></input>
+                  <input type="hidden" name="edit_num" value="'.$edit_num.'"></input>
+                  <input type="submit" name="submit" value="編集する"><br>
                   </form>';
                 }
             }
@@ -83,17 +79,30 @@
             //編集結果を書き込む。
             $edit_name=$_POST["edit_name"];
             $edit_com=$_POST["edit_com"];
-            $edit_num=$_POST["edit_num"];            
+            $edit_num=$_POST["edit_num"];       
+            $lines=file($filename,FILE_SKIP_EMPTY_LINES);
+            $lastline= count($lines);
+            $fp=fopen($filename,"w");
+            foreach($lines as $line){
+                $tex=explode("<>",$line);
+                if($tex[0]!=$edit_num){
+                fwrite($fp,$line);
+                }else{
+                fwrite($fp,$edit_num."<>".$edit_name."<>".$edit_com."<>".$date."<>".$tex[4]."<>".PHP_EOL);
+                }
+            }fclose($fp);
+        }elseif(isset($_POST["edit_num"])&&(empty($_POST["edit_name"])||empty($_POST["edit_com"])) ){
+            echo "編集入力欄に入力されていません。";
         }else{
-            echo "入力されていません。"."<br>";
+            echo "<br>"."入力されていません。"."<br>";
         }
         //表示
         if(file_exists($filename)){
             foreach(file($filename) as $lines) {
                 $line = explode("<>",$lines);//linesを<>で区切ってlineに代入
-                echo $line[0].":";
-                echo $line[1].":";
-                echo $line[2].":";
+                echo $line[0];
+                echo $line[1];
+                echo $line[2];
                 echo $line[3]."<br>";
             } 
         }      
