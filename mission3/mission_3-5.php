@@ -25,7 +25,8 @@
     <?php
         $filename = "mission_3-5.txt";//ファイルの名前を決める
         $date = date("Y年m月d日H時i分s秒");
-        if(!empty($_POST["name"]) && !empty($_POST["com"])&& !empty($_POST["pass"])){
+        if(!empty($_POST["name"]) && !empty($_POST["com"])&& !empty($_POST["pass"])&& empty($_POST["del_pass"]) && empty($_POST["edit_pass"])&&empty($_POST["del"])&& empty($_POST["edit"])&&
+        empty($_POST["edit_num"])){
             $fp = fopen($filename,"a");//追記モードで開く。
             $name = $_POST["name"];
             $com = $_POST["com"];
@@ -48,7 +49,6 @@
             $lines=file($filename,FILE_SKIP_EMPTY_LINES);
             $lastline= count($lines);
             $delnum=file($filename);
-            $ok=false;
             for($i=0; $i<count($delnum); $i++){
                 $delData = explode("<>",$delnum[$i]);
                 //array_splice ( $配列, $開始位置[, $削除する要素の数 [, $置き換える要素を含んだ配列 ]] )
@@ -61,19 +61,17 @@
         }elseif(!empty($_POST["edit"]) && empty($name) && empty($com)&& empty($_POST["del"])){
             //編集を受け取る。
             $edit = $_POST["edit"];//編集ナンバー受け取り
+            $edit_pass=$_POST["edit_pass"];
             $lines=file($filename,FILE_SKIP_EMPTY_LINES);
             $lastline= count($lines);
             foreach($lines as $line){
-              $word=explode("<>",$line);
-            }
-            foreach($lines as $line){
-                $editData=explode("<>",$line);
+                $tex=explode("<>",$line);
                 //echo $word[0];
-                if($editData[0] == $edit){
-                  $edit_name=$editData[1];
-                  $edit_com=$editData[2];
-                  $edit_date=$editData[3];
-                  $edit_num=$editData[0];
+                if($tex[4]==$edit_pass&&$tex[0] == $edit){
+                  $edit_name=$tex[1];
+                  $edit_com=$tex[2];
+                  $edit_date=$tex[3];
+                  $edit_num=$tex[0];
                   echo
                   '<span>お名前:</span><input type="text" name="edit_name" value="'.$edit_name.'"></input><br>
                   <span>コメント:</span> <input type="text" name="edit_com" value="'.$edit_com.'"></input>
@@ -95,7 +93,7 @@
                 if($tex[0]!=$edit_num){
                 fwrite($fp,$line);
                 }else{
-                fwrite($fp,$edit_num."<>".$edit_name."<>".$edit_com."<>".$date."<>".$tex[3].PHP_EOL);
+                fwrite($fp,$edit_num."<>".$edit_name."<>".$edit_com."<>".$date."<>".$tex[4].PHP_EOL);
                 }
             }fclose($fp);
         }elseif(isset($_POST["edit_num"])&&(empty($_POST["edit_name"])||empty($_POST["edit_com"])) ){
@@ -105,7 +103,7 @@
         }
         //表示
         if(file_exists($filename)){
-            foreach(file($filename) as $lines) {
+            foreach(file($filename,FILE_SKIP_EMPTY_LINES) as $lines) {
                 $line = explode("<>",$lines);//linesを<>で区切ってlineに代入
                 echo $line[0];
                 echo $line[1];
