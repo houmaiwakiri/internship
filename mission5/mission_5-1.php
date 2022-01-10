@@ -24,9 +24,9 @@
         <!--formの閉じタグは下の方にある。-->
     <?php
         //ログイン情報
-        $dsn = 'mysql:dbname=tb230882db;host=localhost';
-        $user = 'tb-230882';
-        $password = 'UdJfTfs5wT';
+        $dsn = 'mysql:';
+        $user = '';
+        $password = '';
         $pdo = new PDO($dsn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
         //テーブル作成                    
         $sql = "CREATE TABLE IF NOT EXISTS board"
